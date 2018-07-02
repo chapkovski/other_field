@@ -1,0 +1,22 @@
+{% for widget in widget.subwidgets %}
+    <div class="form-group">
+        {% include widget.template_name %}
+    </div>
+{% endfor %}
+<script>
+    var radio_group_name = "{{ widget.name }}" + "_0";
+    $("input[name=" + radio_group_name + "]").change(function () {
+        {#        TODO: fixing other var#}
+        if ($(this).val() == 'other') {
+            $('.hidden_text_group').show();
+        }
+        else {
+            $('.hidden_text_group').hide();
+        }
+    });
+</script>
+<style>
+    .hidden_text_group {
+        display: {% if show_other_inbox %}block{% else %}none{% endif %};
+    }
+</style>
