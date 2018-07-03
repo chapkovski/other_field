@@ -4,19 +4,21 @@
     </div>
 {% endfor %}
 <script>
-    var radio_group_name = "{{ widget.name }}" + "_0";
-    $("input[name=" + radio_group_name + "]").change(function () {
-        {#        TODO: fixing other var#}
-        if ($(this).val() == 'other') {
-            $('.hidden_text_group').show();
+    {#    todo: put js to media of widget #}
+
+    $("input[name={{ widget.name }}_0]").change(function () {
+        var other_text_input_name = "{{ widget.name }}_1";
+        var $other_text_input_el = $("input[name=" + other_text_input_name + "]");
+        if ($(this).val() == "{{other_val}}") {
+            $other_text_input_el.show();
         }
         else {
-            $('.hidden_text_group').hide();
+            $other_text_input_el.hide();
         }
     });
 </script>
 <style>
-    .hidden_text_group {
+    #id_{{ widget.name }}_1 {
         display: {% if show_other_inbox %}block{% else %}none{% endif %};
     }
 </style>

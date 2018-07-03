@@ -37,4 +37,5 @@ class Player(BasePlayer):
                                    'Doctoral degree',
                                    'Prefer not to state'],
                           other_label='Other (please specify)',
+                          other_value='filka'
                           )

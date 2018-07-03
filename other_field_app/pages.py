@@ -5,12 +5,15 @@ from .models import Constants
 
 class MyPage(Page):
     form_model = 'player'
-    form_fields = ['ddd','edu']
+    form_fields = ['ddd', 'edu']
 
 
+class MyPage2(Page):
+    form_model = 'player'
+    form_fields = ['ddd', 'edu']
 
 
 page_sequence = [
     MyPage,
-
+    MyPage2,
 ]

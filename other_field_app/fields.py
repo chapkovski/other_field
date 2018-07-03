@@ -41,7 +41,7 @@ class OtherFormField(MultiValueField):
             self.other_value = other_value
         self.choices = list(expand_choice_tuples(self.choices))
         self.choices += [(self.other_value, self.other_label), ]
-        self.widget = OtherSelectorWidget(choices=self.choices)
+        self.widget = OtherSelectorWidget(choices=self.choices, other_val=self.other_value)
         fields = (CharField(required=True), CharField(required=False),)
         super().__init__(fields=fields, require_all_fields=False, label=label, **kwargs)
 
