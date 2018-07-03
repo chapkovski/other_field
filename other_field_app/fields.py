@@ -1,9 +1,12 @@
 from django.db import models
 import json
-from .widgets import OtherSelectorWidget
+from .widgets import OtherSelectorWidget, divider
 from django.forms.fields import MultiValueField, CharField
 from otree.common_internal import expand_choice_tuples
+from django.core.exceptions import ValidationError
 
+duplicate_err_msg = 'One of the choices duplicates with the internal name for "Other" choice field'
+wrong_value_msg = 'Please provide a valid name for other_value. It should look like Python variable (no spaces etc.)'
 
 class OtherModelField(models.CharField):
     other_value = None
@@ -39,7 +42,10 @@ class OtherFormField(MultiValueField):
             self.other_label = other_label
         if other_value:
             self.other_value = other_value
+        assert self.other_value.isidentifier(), wrong_value_msg
         self.choices = list(expand_choice_tuples(self.choices))
+        flat_choices = [i for i, j in self.choices]
+        assert self.other_value not in flat_choices, duplicate_err_msg
         self.choices += [(self.other_value, self.other_label), ]
         self.widget = OtherSelectorWidget(choices=self.choices, other_val=self.other_value)
         fields = (CharField(required=True), CharField(required=False),)
@@ -47,10 +53,10 @@ class OtherFormField(MultiValueField):
 
     def compress(self, data_list):
         if data_list[0] == self.other_value:
-            return data_list[1]
+            if data_list[1] in (None, ''):
+                raise ValidationError(u'Please provide the answer for "{}" field'.format(self.other_label))
+            return '{}{}{}'.format(self.other_value, divider, data_list[1])
         else:
             return data_list[0]
 
-    def clean(self, value):
-        ret = super().clean(value)
-        return ret
+

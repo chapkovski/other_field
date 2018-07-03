@@ -1,5 +1,8 @@
 from django.forms import widgets
 
+# for decompression
+divider = ':'
+
 
 class OtherTextInput(widgets.TextInput):
     is_required = False
@@ -32,16 +35,20 @@ class OtherSelectorWidget(widgets.MultiWidget):
         return con
 
     def decompress(self, value):
-        # TODO: very specific case when by accident the value inserted coincides with the value of other_val
-        # results in error...
-        print('VVVALUE', value)
-        print('OTHERVAL', self.other_val)
+        # TODO what if someone starts his other answer with trailing divider? ignore for now
+        # TODO: what if value of choices start with other_val and divider, like 'other: SOMETHING'?
         if value:
-            bare_choices = [i for i, j in self.choices]
-            if value in bare_choices:
-                return [value, '']
+            split_value = value.split(divider)
+            if len(split_value) > 1:
+                is_other = split_value[0] == self.other_val
+                the_rest = ''.join(split_value[1:])
             else:
-                return [self.other_val, value]
+                is_other = False
+                the_rest = ''
+            if is_other:
+                return [self.other_val, the_rest]
+            else:
+                return [value,'']
         return [None, None, ]
 
     def format_output(self, rendered_widgets):
