@@ -28,12 +28,12 @@ will be the one he chooses (in the example above, for instance "Donald Trump")
 if a user chooses the first option.
 
 If they choose the 'Other' option, then the value stored will look like:
-_other: THEIR ANSWER_
+_other_: THEIR ANSWER_
 
 You can define two extra parameters:
 
 * `other_label`: that changes how the 'Other' option look like. 
     _default:_ 'Other'
 * `other_value`: that changes how that marker that is added to the 
-beginning of user answer look like. _default:_ 'other' 
+beginning of user answer look like. _default:_ 'other_' 
 

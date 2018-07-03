@@ -32,7 +32,7 @@ class OtherModelField(models.CharField):
 
 
 class OtherFormField(MultiValueField):
-    other_value = 'other'
+    other_value = 'other_'
     other_label = 'Other'
 
     def __init__(self, other_value=None, other_label=None, label='', **kwargs):
@@ -42,10 +42,13 @@ class OtherFormField(MultiValueField):
             self.other_label = other_label
         if other_value:
             self.other_value = other_value
+        # check that other_value provided is valid
         assert self.other_value.isidentifier(), wrong_value_msg
         self.choices = list(expand_choice_tuples(self.choices))
         flat_choices = [i for i, j in self.choices]
-        assert self.other_value not in flat_choices, duplicate_err_msg
+        # check if value of choices start with other_val and divider, like 'other: SOMETHING'
+        for i in flat_choices:
+            assert not i.startswith(self.other_value), duplicate_err_msg
         self.choices += [(self.other_value, self.other_label), ]
         self.widget = OtherSelectorWidget(choices=self.choices, other_val=self.other_value)
         fields = (CharField(required=True), CharField(required=False),)

@@ -36,7 +36,7 @@ class OtherSelectorWidget(widgets.MultiWidget):
 
     def decompress(self, value):
         # TODO what if someone starts his other answer with trailing divider? ignore for now
-        # TODO: what if value of choices start with other_val and divider, like 'other: SOMETHING'?
+
         if value:
             split_value = value.split(divider)
             if len(split_value) > 1:
